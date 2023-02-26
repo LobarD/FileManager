@@ -40,27 +40,27 @@ func createDir(directory string) {
 }
 
 func copyFile(src string, dst string) error {
-	// Открытие исходного файла для чтения
+	// Open source file for reading
 	srcFile, err := os.Open(src)
 	if err != nil {
 		return err
 	}
 	defer srcFile.Close()
 
-	// Создание выходного файла для записи
+	// Create an output file for writing
 	dstFile, err := os.Create(dst)
 	if err != nil {
 		return err
 	}
 	defer dstFile.Close()
 
-	// Копирование содержимого исходного файла в выходной файл
+	// Copy the contents of the source file to the output file
 	_, err = io.Copy(dstFile, srcFile)
 	if err != nil {
 		return err
 	}
 
-	// Копирование прав доступа исходного файла на выходной файл
+	// Copy the permissions of the source file to the output file
 	srcInfo, err := os.Stat(src)
 	if err != nil {
 		return err
@@ -74,24 +74,24 @@ func copyFile(src string, dst string) error {
 }
 
 func copyDir(src string, dst string) error {
-	// Создание выходной папки, если она не существует
+	// Create an output folder if it doesn't exist
 	err := os.MkdirAll(dst, 0755)
 	if err != nil {
 		return err
 	}
 
-	// Получение списка файлов в исходной папке
+	// Get a list of files in the source folder
 	files, err := os.ReadDir(src)
 	if err != nil {
 		return err
 	}
 
-	// Копирование каждого файла в выходную папку
+	// Copy each file to the output folder
 	for _, file := range files {
 		srcPath := filepath.Join(src, file.Name())
 		dstPath := filepath.Join(dst, file.Name())
 
-		// Копирование файла
+		// Copy file
 		if file.IsDir() {
 			err = copyDir(srcPath, dstPath)
 			if err != nil {
@@ -196,7 +196,7 @@ func main() {
 	list()
 
 	for {
-		fmt.Print("\nEnter command (createFile, createDir, copyFile, copyDir move, rename, delete, list, cd, back, exit): ")
+		fmt.Print("\nEnter command (createFile, createDir, copyFile, copyDir, move, rename, delete, list, cd, back, exit): ")
 		reader := bufio.NewReader(os.Stdin)
 		command, _ := reader.ReadString('\n')
 		command = strings.TrimSuffix(command, "\n")
